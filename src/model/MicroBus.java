@@ -4,10 +4,19 @@
  */
 package model;
 
-/**
- *
- * @author ivanc
- */
-public class MicroBus {
-    
+public class MicroBus extends Vehiculo {
+
+    public MicroBus() {
+        super();
+    }
+
+    public MicroBus(String placa, String ruta) {
+        super(placa, ruta, 25);
+    }
+
+    @Override
+    public double calcularTarifa() {
+        return 10000;
+    }
+
 }
