@@ -4,10 +4,19 @@
  */
 package model;
 
-/**
- *
- * @author ivanc
- */
-public class Bus {
-    
+public class Bus extends Vehiculo {
+
+    public Bus() {
+        super();
+    }
+
+    public Bus(String placa, String ruta) {
+        super(placa, ruta, 45);
+    }
+
+    @Override
+    public double calcularTarifa() {
+        return 15000;
+    }
+
 }
