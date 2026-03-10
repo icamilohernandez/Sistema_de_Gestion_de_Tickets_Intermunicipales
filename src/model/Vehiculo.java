@@ -63,4 +63,13 @@ public abstract class Vehiculo {
     }
     
     public abstract double calcularTarifa();
+    
+    @Override
+    public String toString() {
+        return "Placa: " + getPlaca() +
+               " | Ruta: " + getRuta() +
+               " | Capacidad: " + getCapacidadMax() +
+               " | Pasajeros: " + getPasajerosActuales() +
+               " | Disponible: " + isDisponible();
+    }
 }

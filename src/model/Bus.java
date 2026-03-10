@@ -4,7 +4,7 @@
  */
 package model;
 
-public class Bus extends Vehiculo {
+public class Bus extends Vehiculo implements Imprimible {
 
     public Bus() {
         super();
@@ -15,8 +15,18 @@ public class Bus extends Vehiculo {
     }
 
     @Override
-    public double calcularTarifa() {
-        return 15000;
+    public void imprimirDetalle() {
+        System.out.println("=== BUS ===");
+        System.out.println("Placa      : " + getPlaca());
+        System.out.println("Ruta       : " + getRuta());
+        System.out.println("Capacidad  : " + getCapacidadMax());
+        System.out.println("Pasajeros  : " + getPasajerosActuales());
+        System.out.println("Tarifa     : $" + calcularTarifa());
+        System.out.println("Disponible : " + isDisponible());
     }
 
+    @Override
+    public String toString() {
+        return "Bus | " + super.toString() + " | Tarifa: $" + calcularTarifa();
+    }
 }

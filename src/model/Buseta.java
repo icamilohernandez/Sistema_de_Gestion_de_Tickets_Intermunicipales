@@ -4,7 +4,7 @@
  */
 package model;
 
-public class Buseta extends Vehiculo {
+public class Buseta extends Vehiculo implements Imprimible {
 
     private static final int CAPACIDAD = 19;
     private static final double TARIFA_BASE = 8000;
@@ -18,8 +18,18 @@ public class Buseta extends Vehiculo {
     }
 
     @Override
-    public double calcularTarifa() {
-        return TARIFA_BASE;
+    public void imprimirDetalle() {
+        System.out.println("=== BUSETA ===");
+        System.out.println("Placa      : " + getPlaca());
+        System.out.println("Ruta       : " + getRuta());
+        System.out.println("Capacidad  : " + getCapacidadMax());
+        System.out.println("Pasajeros  : " + getPasajerosActuales());
+        System.out.println("Tarifa     : $" + calcularTarifa());
+        System.out.println("Disponible : " + isDisponible());
     }
 
+    @Override
+    public String toString() {
+        return "Buseta | " + super.toString() + " | Tarifa: $" + calcularTarifa();
+    }
 }
