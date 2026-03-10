@@ -4,10 +4,12 @@
  */
 package model;
 
-/**
- *
- * @author ivanc
- */
-public class Vehiculo {
-    
+public abstract class Vehiculo {
+
+    private String placa;
+    private String ruta;
+    private int capacidadMax;
+    private int pasajerosActuales;
+    private boolean disponible;
+
 }
