@@ -12,4 +12,53 @@ public abstract class Vehiculo {
     private int pasajerosActuales;
     private boolean disponible;
 
+    public Vehiculo (){}
+    
+    public Vehiculo(String placa, String ruta, int capacidadMax, int pasajerosActuales, boolean disponible) {
+        this.placa = placa;
+        this.ruta = ruta;
+        this.capacidadMax = capacidadMax;
+        this.pasajerosActuales = pasajerosActuales;
+        this.disponible = disponible;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public int getCapacidadMax() {
+        return capacidadMax;
+    }
+
+    public void setCapacidadMax(int capacidadMax) {
+        this.capacidadMax = capacidadMax;
+    }
+
+    public int getPasajerosActuales() {
+        return pasajerosActuales;
+    }
+
+    public void setPasajerosActuales(int pasajerosActuales) {
+        this.pasajerosActuales = pasajerosActuales;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
 }
