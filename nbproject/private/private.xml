@@ -7,6 +7,9 @@
             <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/model/Buseta.java</file>
             <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/model/MicroBus.java</file>
             <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/model/Bus.java</file>
+            <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/model/Imprimible.java</file>
+            <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/dao/VehiculoDao.java</file>
+            <file>file:/C:/Users/Csamu/Documents/Sistema_de_Gestion_de_Tickets_Intermunicipales/src/dao/VehiculoDAOImpl.java</file>
         </group>
     </open-files>
 </project-private>
