@@ -8,6 +8,17 @@ package service;
  *
  * @author ivanc
  */
+import dao.VehiculoDAO;
+import dao.VehiculoDAOImpl;
+import java.util.List;
+import model.Vehiculo;
+
 public class VehiculoService {
-    
+
+    private VehiculoDAO vehiculoDAO;
+
+    public VehiculoService() {
+        this.vehiculoDAO = new VehiculoDAOImpl();
+    }
+
 }
