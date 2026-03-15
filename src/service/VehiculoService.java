@@ -10,6 +10,7 @@ package service;
  */
 import dao.VehiculoDAO;
 import dao.VehiculoDAOImpl;
+import java.util.ArrayList;
 import java.util.List;
 import model.Vehiculo;
 
@@ -65,5 +66,14 @@ public void actualizarCupos(String placa) {
     }
     vehiculoDAO.actualizar(v);
     System.out.println("Cupo actualizado. Pasajeros actuales: " + v.getPasajerosActuales());
+}
+public List<Vehiculo> obtenerVehiculosDisponibles() {
+    List<Vehiculo> disponibles = new ArrayList<>();
+    for (Vehiculo v : vehiculoDAO.listarTodos()) {
+        if (v.isDisponible()) {
+            disponibles.add(v);
+        }
+    }
+    return disponibles;
 }
 }
