@@ -20,5 +20,27 @@ public class VehiculoService {
     public VehiculoService() {
         this.vehiculoDAO = new VehiculoDAOImpl();
     }
+    public boolean placaDuplicada(String placa) {
+    return vehiculoDAO.buscarPorPlaca(placa) != null;
+}
+    public void registrarVehiculo(Vehiculo vehiculo) {
+    if (placaDuplicada(vehiculo.getPlaca())) {
+        System.out.println("Ya existe un vehiculo con la placa: " + vehiculo.getPlaca());
+        return;
+    }
+    vehiculoDAO.guardar(vehiculo);
+    System.out.println("Vehiculo registrado exitosamente.");
+}
 
+    public List<Vehiculo> listarVehiculos() {
+    return vehiculoDAO.listarTodos();
+}
+
+    public Vehiculo buscarVehiculoPorPlaca(String placa) {
+    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    if (v == null) {
+        System.out.println("No se encontro ningun vehiculo con la placa: " + placa);
+    }
+    return v;
+}
 }
