@@ -43,4 +43,27 @@ public class VehiculoService {
     }
     return v;
 }
+    public boolean verificarDisponibilidad(String placa) {
+    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    if (v == null) return false;
+    return v.getPasajerosActuales() < v.getCapacidadMax();
+}
+
+public void actualizarCupos(String placa) {
+    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    if (v == null) {
+        System.out.println("No se encontro el vehiculo con la placa: " + placa);
+        return;
+    }
+    if (!verificarDisponibilidad(placa)) {
+        System.out.println("El vehiculo con placa " + placa + " no tiene cupos disponibles.");
+        return;
+    }
+    v.setPasajerosActuales(v.getPasajerosActuales() + 1);
+    if (v.getPasajerosActuales() == v.getCapacidadMax()) {
+        v.setDisponible(false);
+    }
+    vehiculoDAO.actualizar(v);
+    System.out.println("Cupo actualizado. Pasajeros actuales: " + v.getPasajerosActuales());
+}
 }
