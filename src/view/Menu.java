@@ -79,4 +79,28 @@ public class Menu {
 
     }
 
+    private void registrarConductor() {
+        sc.nextLine();
+        System.out.print("Cedula: ");
+        String cedula = sc.nextLine();
+        System.out.print("Nombre: ");
+        String nombre = sc.nextLine();
+        System.out.print("Numero de licencia: ");
+        String licencia = sc.nextLine();
+        System.out.println("Categoria: 1.B1  2.B2  3.C1  4.C2");
+        int categoria = sc.nextInt();
+        System.out.println(personaService.registrarConductor(conductores, cedula, nombre, licencia, categoria));
+    }
+    
+    private void registrarPasajero() {
+        sc.nextLine();
+        System.out.print("Cedula: ");
+        String cedula = sc.nextLine();
+        System.out.print("Nombre: ");
+        String nombre = sc.nextLine();
+        System.out.println("Tipo: 1.Regular  2.Estudiante  3.Adulto Mayor");
+        int tipo = sc.nextInt();
+        System.out.println(personaService.registrarPasajero(pasajeros, cedula, nombre, tipo));
+    }
+
 }
