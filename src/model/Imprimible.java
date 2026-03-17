@@ -8,6 +8,6 @@ package model;
  *
  * @author ivanc
  */
-public class Imprimible {
-    
+public interface Imprimible {
+    void imprimirDetalle();
 }

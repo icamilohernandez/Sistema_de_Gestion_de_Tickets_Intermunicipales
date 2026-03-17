@@ -44,7 +44,7 @@ public class Menu {
                 case 3: registrarConductor(); break;
                 case 4: registrarPasajero(); break;
                 case 5: venderTicket(); break;
-                case 6: listarTickets(); break;
+                case 6: listaTickets(); break;
                 case 7: verEstadisticas(); break;
                 case 0: System.out.println("Adios"); break;
                 default: System.out.println("Opcion invalida");
@@ -101,6 +101,38 @@ public class Menu {
         System.out.println("Tipo: 1.Regular  2.Estudiante  3.Adulto Mayor");
         int tipo = sc.nextInt();
         System.out.println(personaService.registrarPasajero(pasajeros, cedula, nombre, tipo));
+    }
+
+    private void venderTicket() {
+        sc.nextLine();
+        System.out.print("Cedula del pasajero: ");
+        String cedula = sc.nextLine();
+        System.out.print("Placa del vehiculo: ");
+        String placa = sc.nextLine();
+        System.out.print("Origen: ");
+        String origen = sc.nextLine();
+        System.out.print("Destino: ");
+        String destino = sc.nextLine();
+        System.out.println(ticketService.venderTicket(tickets, pasajeros, vehiculos, cedula, placa, origen, destino));
+    }
+    
+    private void listaTickets() {
+        if (tickets.isEmpty()) {
+            System.out.println("No hay tickets vendidos");
+            return;
+        }
+        System.out.println("Lista de Tickets:");
+        for (Ticket t : tickets) {
+            System.out.println(t);
+        }
+    }
+
+    private void verEstadisticas() {
+        System.out.println("Estadisticas:");
+        System.out.println("Total de vehiculos: " + vehiculos.size());
+        System.out.println("Total de conductores: " + conductores.size());
+        System.out.println("Total de pasajeros: " + pasajeros.size());
+        System.out.println("Total de tickets vendidos: " + tickets.size());
     }
 
 }
