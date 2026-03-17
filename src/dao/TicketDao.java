@@ -4,10 +4,13 @@
  */
 package dao;
 
-/**
- *
- * @author ivanc
- */
-public class TicketDao {
-    
+import model.Ticket;
+import java.util.List;
+
+public interface TicketDao {
+    void guardar(Ticket ticket);
+    Ticket buscarPorCodigo(String codigo);
+    List<Ticket> buscarTodos();
+    void actualizar(Ticket ticket);
+    void eliminar(String codigo);
 }

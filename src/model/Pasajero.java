@@ -1,13 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author ivanc
- */
-public class Pasajero {
+public abstract class Pasajero extends Persona {
     
+    public Pasajero(String nombre, String identificacion) {
+        super(nombre, identificacion);
+    }
+    
+    public abstract double calcularTarifa(double distancia);
+    
+    public abstract String getTipoPasajero();
 }

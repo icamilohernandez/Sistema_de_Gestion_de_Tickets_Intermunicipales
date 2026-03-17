@@ -4,10 +4,15 @@
  */
 package dao;
 
-/**
- *
- * @author ivanc
- */
-public class PersonaDao {
+import java.util.List;
+
+import model.Persona;
+
+public interface PersonaDao {
+     void guardar(Persona persona);
+    Persona buscarPorId(String id);
+    List<Persona> buscarTodos();
+    void actualizar(Persona persona);
+    void eliminar(String id);
     
 }

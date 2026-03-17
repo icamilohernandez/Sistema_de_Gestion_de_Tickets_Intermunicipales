@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package service;
 
-/**
- *
- * @author ivanc
- */
-public class TicketService {
-    
+import model.Ticket;
+import java.util.List;
+
+public interface TicketService {
+    void crearTicket(Ticket ticket);
+    Ticket consultarTicket(String codigo);
+    List<Ticket> listarTickets();
+    void actualizarTicket(Ticket ticket);
+    void cancelarTicket(String codigo);
+    double calcularTarifaFinal(Ticket ticket);
 }
