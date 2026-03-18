@@ -7,10 +7,41 @@ package service;
 import model.Persona;
 import java.util.List;
 
-public interface PersonaService {
-    void registrarPersona(Persona persona);
-    Persona buscarPersona(String id);
-    List<Persona> listarPersonas();
-    void actualizarPersona(Persona persona);
-    void eliminarPersona(String id);
+import dao.PersonaDao;
+
+public class PersonaService {
+    private PersonaDao personaDao;
+    
+    public PersonaService() {
+        this.personaDao = new PersonaDao();
+    }
+    
+    public void registrarPersona(Persona persona) {
+        // Aquí se pueden agregar validaciones
+        if (persona.getNombre() == null || persona.getNombre().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+        if (persona.getCedula() == null || persona.getCedula().isEmpty()) {
+            throw new IllegalArgumentException("La cédula no puede estar vacía");
+        }
+        personaDao.guardar(persona);
+    }
+    
+    public Persona buscarPersona(String id) {
+        return personaDao.buscarPorId(id);
+    }
+    
+
+    public List<Persona> listarPersonas() {
+        return personaDao.buscarTodos();
+    }
+    
+
+    public void actualizarPersona(Persona persona) {
+        personaDao.actualizar(persona);
+    }
+    
+    public void eliminarPersona(String id) {
+        personaDao.eliminar(id);
+    }
 }
