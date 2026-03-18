@@ -8,50 +8,49 @@ package service;
  *
  * @author ivanc
  */
-import dao.VehiculoDAO;
-import dao.VehiculoDAOImpl;
+import dao.VehiculoDao;
 import java.util.ArrayList;
 import java.util.List;
 import model.Vehiculo;
 
 public class VehiculoService {
 
-    private VehiculoDAO vehiculoDAO;
+    private VehiculoDao vehiculoDao;
 
     public VehiculoService() {
-        this.vehiculoDAO = new VehiculoDAOImpl();
+        this.vehiculoDao = new VehiculoDao();
     }
     public boolean placaDuplicada(String placa) {
-    return vehiculoDAO.buscarPorPlaca(placa) != null;
+    return vehiculoDao.buscarPorPlaca(placa) != null;
 }
     public void registrarVehiculo(Vehiculo vehiculo) {
     if (placaDuplicada(vehiculo.getPlaca())) {
         System.out.println("Ya existe un vehiculo con la placa: " + vehiculo.getPlaca());
         return;
     }
-    vehiculoDAO.guardar(vehiculo);
+    vehiculoDao.guardar(vehiculo);
     System.out.println("Vehiculo registrado exitosamente.");
 }
 
     public List<Vehiculo> listarVehiculos() {
-    return vehiculoDAO.listarTodos();
+    return vehiculoDao.listarTodos();
 }
 
     public Vehiculo buscarVehiculoPorPlaca(String placa) {
-    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
     if (v == null) {
         System.out.println("No se encontro ningun vehiculo con la placa: " + placa);
     }
     return v;
 }
     public boolean verificarDisponibilidad(String placa) {
-    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
     if (v == null) return false;
     return v.getPasajerosActuales() < v.getCapacidadMax();
 }
 
 public void actualizarCupos(String placa) {
-    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
     if (v == null) {
         System.out.println("No se encontro el vehiculo con la placa: " + placa);
         return;
@@ -64,12 +63,12 @@ public void actualizarCupos(String placa) {
     if (v.getPasajerosActuales() == v.getCapacidadMax()) {
         v.setDisponible(false);
     }
-    vehiculoDAO.actualizar(v);
+    vehiculoDao.actualizar(v);
     System.out.println("Cupo actualizado. Pasajeros actuales: " + v.getPasajerosActuales());
 }
 public List<Vehiculo> obtenerVehiculosDisponibles() {
     List<Vehiculo> disponibles = new ArrayList<>();
-    for (Vehiculo v : vehiculoDAO.listarTodos()) {
+    for (Vehiculo v : vehiculoDao.listarTodos()) {
         if (v.isDisponible()) {
             disponibles.add(v);
         }
