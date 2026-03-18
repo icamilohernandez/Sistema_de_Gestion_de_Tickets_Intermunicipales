@@ -2,18 +2,23 @@ package model;
 
 public class Bus extends Vehiculo implements Imprimible {
 
+    private double tarifa = 15000;
+
     public Bus() {
         super();
     }
 
     public Bus(String placa, String ruta) {
-        super(placa, ruta);
-        this.capacidadMax = 45;
+        super(placa, ruta, 45, 0, true); 
+    }
+    
+    public double getTarifa() {
+        return tarifa;
     }
 
     @Override
     public double calcularTarifa() {
-        return 2500.0;
+        return tarifa;
     }
 
     @Override

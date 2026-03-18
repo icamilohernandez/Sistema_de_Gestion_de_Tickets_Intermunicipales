@@ -7,10 +7,10 @@ public abstract class Persona {
     protected String sexo;
     protected String telefono;
     
-    public Persona(String nombre, String cedula, String edad, String sexo, String telefono) {
+    public Persona(String nombre, String cedula, int edad, String sexo, String telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
-        this.edad = edad;
+        this.edad = String.valueOf(edad);
         this.sexo = sexo;
         this.telefono = telefono;
     }

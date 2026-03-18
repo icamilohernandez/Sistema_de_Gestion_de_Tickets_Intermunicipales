@@ -1,20 +1,21 @@
 package model;
 
 public class MicroBus extends Vehiculo implements Imprimible {
+
+     private static final int CAPACIDAD = 25;
+    private static final double TARIFA_BASE = 10000;
     
     public MicroBus() {
         super();
     }
 
     public MicroBus(String placa, String ruta) {
-        super(placa, ruta);
-        setCapacidadMax(20);
-        setTarifa(10000);
+        super(placa, ruta, CAPACIDAD, 0, true);
     }
 
     @Override
     public double calcularTarifa() {
-        return tarifa;
+        return TARIFA_BASE;
     }
 
     @Override

@@ -10,7 +10,12 @@ public class Buseta extends Vehiculo implements Imprimible {
     }
 
     public Buseta(String placa, String ruta) {
-        super(placa, ruta, CAPACIDAD);
+        super(placa, ruta, CAPACIDAD, 0, true);
+    }
+
+    @Override
+    public double calcularTarifa() {
+        return TARIFA_BASE;
     }
 
     @Override
