@@ -21,7 +21,7 @@ public class Ticket implements Imprimible, Calculable {
         this.destino     = destino;
         
     double tarifa    = vehiculo.calcularTarifa();
-    double descuento = pasajero.calDescuento();
+    double descuento = pasajero.calcularDescuento();
         this.valorFinal  = tarifa - (tarifa * descuento);
     }
 

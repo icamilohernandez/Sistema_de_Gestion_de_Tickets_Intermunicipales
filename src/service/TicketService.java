@@ -5,10 +5,10 @@ import model.Ticket;
 import model.Pasajero;
 import model.Vehiculo;
 import java.util.List;
-import java.util.ArrayList;
 
 public class TicketService {
 
+    private static int contaTickets = 1;
     private TicketDao ticketDao;
     private VehiculoService vehiculoService;
     private PersonaService personaService;
@@ -35,6 +35,7 @@ public class TicketService {
             return "Error: el vehiculo con placa " + placaVehiculo + " no tiene cupos disponibles";
         }
 
+        String codigo = "TCK" + contaTickets++;
         double tarifaBase = vehiculo.calcularTarifa();
         double descuento  = pasajero.calcularDescuento();
         double valorFinal = tarifaBase - (tarifaBase * descuento);

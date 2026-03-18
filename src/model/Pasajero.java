@@ -15,7 +15,9 @@ public abstract class Pasajero extends Persona {
         return tipo;
     }
 
-    public abstract double calcularTarifa();
+    public abstract double calcularDescuento();
+
+    public abstract void imprimirDetalle();
 
     @Override
     public void verEstadisticas() {

@@ -19,7 +19,7 @@ public class MicroBus extends Vehiculo implements Imprimible {
     }
 
     @Override
-    public void impriDtlle() {
+    public void imprimirDetalle() {
         System.out.println("=== MICROBUS ===");
         System.out.println("Placa      : " + getPlaca());
         System.out.println("Ruta       : " + getRuta());
