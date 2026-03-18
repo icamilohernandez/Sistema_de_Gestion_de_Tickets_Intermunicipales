@@ -54,5 +54,5 @@ public abstract class Persona {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-    public abstract void verEstadisticas;
+    public abstract void verEstadisticas();
 }

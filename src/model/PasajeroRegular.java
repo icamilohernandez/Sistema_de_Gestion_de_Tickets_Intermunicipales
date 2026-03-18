@@ -15,4 +15,9 @@ public class PasajeroRegular extends Pasajero {
     public String getTipoPasajero() {
         return "Regular";
     }
+    
+    @Override
+    public void verEstadisticas() {
+        System.out.println("Estadísticas del Pasajero Regular: " + nombre);
+    }
 }
