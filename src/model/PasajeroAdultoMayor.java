@@ -19,6 +19,6 @@ public class PasajeroAdultoMayor extends Pasajero {
     
     @Override
     public void verEstadisticas() {
-        // Implementation of abstract method from Persona
+
     }
 }
