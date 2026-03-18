@@ -1,12 +1,29 @@
 package model;
 
 public abstract class Pasajero extends Persona {
-    
-    public Pasajero(String nombre, String cedula, int edad, String sexo, String telefono) {
+
+    public enum TipoPasajero { Regular, Estudiante, Adulto_Mayor }
+
+    private TipoPasajero tipo;
+
+    public Pasajero(String nombre, String cedula, int edad, 
+                    String sexo, String telefono, TipoPasajero tipo) {
         super(nombre, cedula, edad, sexo, telefono);
+        this.tipo = tipo;
     }
-    
-    public abstract double calcularTarifa(double distancia);
-    
-    public abstract String getTipoPasajero();
+
+    public TipoPasajero getTipo() {
+        return tipo;
+    }
+
+    public abstract double calcularTarifa();
+
+    @Override
+    public void verEstadisticas() {
+    }
+
+    @Override
+    public String toString() {
+        return "Cedula: " + getCedula() + " | Nombre: " + getNombre() + " | Tipo: " + tipo;
+    }
 }

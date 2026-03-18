@@ -1,24 +1,33 @@
 package model;
 
 public class PasajeroEstudiante extends Pasajero {
-    
-    public PasajeroEstudiante(String nombre, String cedula, int edad, String sexo, String telefono) {
-        super(nombre, cedula, String.valueOf(edad), sexo, telefono);
+
+    public PasajeroEstudiante(String nombre, String cedula, int edad,
+                               String sexo, String telefono) {
+        super(nombre, cedula, edad, sexo, telefono, TipoPasajero.Estudiante);
     }
-    
+
     @Override
-    public double calcularTarifa(double distancia) {
-        // Estudiante: 50% descuento
-        return distancia * 50;
+    public double calDescuento() {
+        return 0.15;
     }
-    
-    @Override
-    public String getTipoPasajero() {
-        return "Estudiante";
-    }
-    
+
     @Override
     public void verEstadisticas() {
-        // Implementation of abstract method from Persona
+        System.out.println("Tipo: Estudiante | Descuento: 15%");
+    }
+
+    @Override
+    public void impriDtlle() {
+        System.out.println("=== ESTUDIANTE ===");
+        System.out.println("Cedula   : " + getCedula());
+        System.out.println("Nombre   : " + getNombre());
+        System.out.println("Edad     : " + getEdad());
+        System.out.println("Descuento: 15%");
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante | " + super.toString();
     }
 }

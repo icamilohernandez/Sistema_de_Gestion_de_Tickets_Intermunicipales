@@ -19,7 +19,7 @@ public class Buseta extends Vehiculo implements Imprimible {
     }
 
     @Override
-    public void imprimirDetalle() {
+    public void impriDtlle() {
         System.out.println("=== BUSETA ===");
         System.out.println("Placa      : " + getPlaca());
         System.out.println("Ruta       : " + getRuta());

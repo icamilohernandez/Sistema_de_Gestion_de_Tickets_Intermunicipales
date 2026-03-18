@@ -1,31 +1,67 @@
 package model;
 
-public class Ticket {
+import java.util.Date;
+
+public class Ticket implements Imprimible, Calculable {
+
     private String codigo;
     private Pasajero pasajero;
-    private double distancia;
-    private double tarifa;
-    
-    public Ticket(String codigo, Pasajero pasajero, double distancia) {
-        this.codigo = codigo;
-        this.pasajero = pasajero;
-        this.distancia = distancia;
-        this.tarifa = pasajero.calcularTarifa(distancia);
+    private Vehiculo vehiculo;
+    private Date fechaCompra;
+    private String origen;
+    private String destino;
+    private double valorFinal;
+
+    public Ticket(String codigo, Pasajero pasajero, Vehiculo vehiculo,
+                  String origen, String destino) {
+        this.codigo      = codigo;
+        this.pasajero    = pasajero;
+        this.vehiculo    = vehiculo;
+        this.fechaCompra = new Date();
+        this.origen      = origen;
+        this.destino     = destino;
+        
+        double tarifa    = vehiculo.calTarifa();
+        double descuento = pasajero.calDescuento();
+        this.valorFinal  = tarifa - (tarifa * descuento);
     }
-    
+
+    @Override
+    public double calTotal() {
+        return valorFinal;
+    }
+
+    @Override
+    public void impriDtlle() {
+        System.out.println("=== TICKET ===");
+        System.out.println("Codigo    : " + codigo);
+        System.out.println("Pasajero  : " + pasajero.getNombre());
+        System.out.println("Vehiculo  : " + vehiculo.getPlaca());
+        System.out.println("Origen    : " + origen);
+        System.out.println("Destino   : " + destino);
+        System.out.println("Fecha     : " + fechaCompra);
+        System.out.println("Valor     : $" + valorFinal);
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket | " + codigo + " | " + pasajero.getNombre() + 
+               " | " + vehiculo.getPlaca() + " | $" + valorFinal;
+    }
+
     public String getCodigo() {
         return codigo;
     }
-    
+
     public Pasajero getPasajero() {
         return pasajero;
     }
-    
-    public double getDistancia() {
-        return distancia;
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
-    
-    public double getTarifa() {
-        return tarifa;
+
+    public double getValorFinal() {
+        return valorFinal;
     }
 }

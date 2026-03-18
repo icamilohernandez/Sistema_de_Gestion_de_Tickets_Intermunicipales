@@ -22,7 +22,7 @@ public class Bus extends Vehiculo implements Imprimible {
     }
 
     @Override
-    public void imprimirDetalle() {
+    public void impriDtlle() {
         System.out.println("=== BUS ===");
         System.out.println("Placa      : " + getPlaca());
         System.out.println("Ruta       : " + getRuta());
