@@ -17,7 +17,7 @@ public class PersonaDAOImpl implements PersonaDao {
     @Override
     public Persona buscarPorId(String id) {
         for (Persona p : personas) {
-            if (p.getIdentificacion().equals(id)) {
+            if (p.getCedula().equals(id)) {
                 return p;
             }
         }
@@ -31,7 +31,7 @@ public class PersonaDAOImpl implements PersonaDao {
     
     @Override
     public void actualizar(Persona persona) {
-        Persona existente = buscarPorId(persona.getIdentificacion());
+        Persona existente = buscarPorId(persona.getCedula());
         if (existente != null) {
             existente.setNombre(persona.getNombre());
             System.out.println("Persona actualizada: " + persona.getNombre());

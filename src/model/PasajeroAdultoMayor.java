@@ -2,8 +2,8 @@ package model;
 
 public class PasajeroAdultoMayor extends Pasajero {
     
-    public PasajeroAdultoMayor(String nombre, String identificacion) {
-        super(nombre, identificacion);
+    public PasajeroAdultoMayor(String nombre, String cedula, int edad, String sexo, String telefono) {
+        super(nombre, cedula, String.valueOf(edad), sexo, telefono);
     }
     
     @Override

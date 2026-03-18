@@ -18,8 +18,8 @@ public class PersonaServiceImpl implements PersonaService {
         if (persona.getNombre() == null || persona.getNombre().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
         }
-        if (persona.getIdentificacion() == null || persona.getIdentificacion().isEmpty()) {
-            throw new IllegalArgumentException("La identificación no puede estar vacía");
+        if (persona.getCedula() == null || persona.getCedula().isEmpty()) {
+            throw new IllegalArgumentException("La cédula no puede estar vacía");
         }
         personaDAO.guardar(persona);
     }
