@@ -1,11 +1,17 @@
 package model;
 public abstract class Persona {
     protected String nombre;
-    protected String identificacion;
+    protected String cedula;
+    protected String edad;
+    protected String sexo;
+    protected String telefono;
     
-    public Persona(String nombre, String identificacion) {
+    public Persona(String nombre, String cedula, String edad, String sexo, String telefono) {
         this.nombre = nombre;
-        this.identificacion = identificacion;
+        this.cedula = cedula;
+        this.edad = edad;
+        this.sexo = sexo;
+        this.telefono = telefono;
     }
     
     public String getNombre() {
@@ -16,11 +22,36 @@ public abstract class Persona {
         this.nombre = nombre;
     }
     
-    public String getIdentificacion() {
-        return identificacion;
+    public String getCedula() {
+        return cedula;
     }
     
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
+    
+    public String getEdad() {
+        return edad;
+    }
+    
+    public void setEdad(String edad) {
+        this.edad = edad;
+    }
+    
+    public String getSexo() {
+        return sexo;
+    }
+    
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+    
+    public String getTelefono() {
+        return telefono;
+    }
+    
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    public abstract void verEstadisticas;
 }
