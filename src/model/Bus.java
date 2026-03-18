@@ -7,7 +7,13 @@ public class Bus extends Vehiculo implements Imprimible {
     }
 
     public Bus(String placa, String ruta) {
-        super(placa, ruta, 45);
+        super(placa, ruta);
+        this.capacidadMax = 45;
+    }
+
+    @Override
+    public double calcularTarifa() {
+        return 2500.0;
     }
 
     @Override

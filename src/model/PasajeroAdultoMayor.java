@@ -16,4 +16,9 @@ public class PasajeroAdultoMayor extends Pasajero {
     public String getTipoPasajero() {
         return "Adulto Mayor";
     }
+    
+    @Override
+    public void verEstadisticas() {
+        // Implementation of abstract method from Persona
+    }
 }

@@ -7,7 +7,14 @@ public class MicroBus extends Vehiculo implements Imprimible {
     }
 
     public MicroBus(String placa, String ruta) {
-        super(placa, ruta, 25);
+        super(placa, ruta);
+        setCapacidadMax(20);
+        setTarifa(10000);
+    }
+
+    @Override
+    public double calcularTarifa() {
+        return tarifa;
     }
 
     @Override
