@@ -4,10 +4,13 @@
  */
 package dao;
 
-/**
- *
- * @author ivanc
- */
-public class VehiculoDao {
-    
+import java.util.List;
+import model.Vehiculo;
+
+public interface VehiculoDAO {
+    void guardar(Vehiculo vehiculo);
+    List<Vehiculo> listarTodos();
+    Vehiculo buscarPorPlaca(String placa);
+    void actualizar(Vehiculo vehiculo);
+    void eliminar(String placa);
 }
