@@ -19,8 +19,7 @@ public class TicketService {
         this.personaService = new PersonaService();
     }
 
-     public String venderTicket(String cedulaPasajero, String placaVehiculo,
-                                String origen, String destino) {
+     public String venderTicket(String cedulaPasajero, String placaVehiculo, String origen, String destino) {
                                     
     Pasajero pasajero = (Pasajero) personaService.buscarPersona(cedulaPasajero);
         if (pasajero == null) {
@@ -36,11 +35,11 @@ public class TicketService {
             return "Error: el vehiculo con placa " + placaVehiculo + " no tiene cupos disponibles";
         }
 
-        double tarifaBase = vehiculo.calTarifa();
-        double descuento  = pasajero.calDescuento();
+        double tarifaBase = vehiculo.calcularTarifa();
+        double descuento  = pasajero.calcularDescuento();
         double valorFinal = tarifaBase - (tarifaBase * descuento);
         
-        Ticket ticket = new Ticket(pasajero, vehiculo, origen, destino, valorFinal);
+        Ticket ticket = new Ticket(codigo, pasajero, vehiculo, origen, destino);
         ticketDao.guardar(ticket);
 
         vehiculoService.actualizarCupos(placaVehiculo);
@@ -49,7 +48,7 @@ public class TicketService {
     }
 
     public List<Ticket> listarTickets() {
-        return ticketDao.listarTodos();
+        return ticketDao.buscarTodos();
     }
 
     public Ticket buscarTicket(String id) {
@@ -60,35 +59,31 @@ public class TicketService {
         return t;
     }
 
-    // ESTADISTICAS
     public double calcularTotalRecaudado() {
         double total = 0;
-        for (Ticket t : ticketDao.listarTodos()) {
+        for (Ticket t : ticketDao.buscarTodos()) {
             total += t.getValorFinal();
         }
         return total;
     }
 
     public void mostrarEstadisticas() {
-        List<Ticket> tickets = ticketDao.listarTodos();
+        List<Ticket> tickets = ticketDao.buscarTodos();
 
-        // Total recaudado
         System.out.println("Total recaudado: $" + calcularTotalRecaudado());
 
-        // Pasajeros por tipo
         int regular = 0, estudiante = 0, adultoMayor = 0;
         for (Ticket t : tickets) {
             switch (t.getPasajero().getTipo()) {
-                case Regular      regular++;      break;
+                case Regular:      regular++;      break;
                 case Estudiante:   estudiante++;   break;
-                case AdultoMayor: adultoMayor++;  break;
+                case Adulto_Mayor:  adultoMayor++;  break;
             }
         }
         System.out.println("Pasajeros regulares:     " + regular);
         System.out.println("Pasajeros estudiantes:   " + estudiante);
         System.out.println("Pasajeros adulto mayor:  " + adultoMayor);
 
-        // Vehiculo con mas tickets
         Vehiculo vehiculoTop = null;
         int maxTickets = 0;
         for (Ticket t : tickets) {

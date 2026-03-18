@@ -8,7 +8,7 @@ public class PasajeroEstudiante extends Pasajero {
     }
 
     @Override
-    public double calDescuento() {
+    public double calcularDescuento() {
         return 0.15;
     }
 
@@ -18,7 +18,7 @@ public class PasajeroEstudiante extends Pasajero {
     }
 
     @Override
-    public void impriDtlle() {
+    public void imprimirDetalle() {
         System.out.println("=== ESTUDIANTE ===");
         System.out.println("Cedula   : " + getCedula());
         System.out.println("Nombre   : " + getNombre());

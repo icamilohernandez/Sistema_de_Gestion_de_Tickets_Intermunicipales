@@ -3,14 +3,14 @@ package model;
 public abstract class Persona {
     protected String nombre;
     protected String cedula;
-    protected String edad;
+    protected int edad;
     protected String sexo;
     protected String telefono;
     
     public Persona(String nombre, String cedula, int edad, String sexo, String telefono) {
         this.nombre = nombre;
         this.cedula = cedula;
-        this.edad = String.valueOf(edad);
+        this.edad = edad;
         this.sexo = sexo;
         this.telefono = telefono;
     }
@@ -31,11 +31,11 @@ public abstract class Persona {
         this.cedula = cedula;
     }
     
-    public String getEdad() {
+    public int getEdad() {
         return edad;
     }
     
-    public void setEdad(String edad) {
+    public void setEdad(int edad) {
         this.edad = edad;
     }
     

@@ -7,7 +7,7 @@
     }
 
     @Override
-    public double calDescuento() {
+    public double calcularDescuento() {
         return 0.30;
     }
 
@@ -17,7 +17,7 @@
     }
 
     @Override
-    public void impriDtlle() {
+    public void imprimirDetalle() {
         System.out.println("=== ADULTO MAYOR ===");
         System.out.println("Cedula   : " + getCedula());
         System.out.println("Nombre   : " + getNombre());

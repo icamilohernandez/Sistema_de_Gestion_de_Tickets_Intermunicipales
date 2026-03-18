@@ -17,7 +17,7 @@ public class PersonaService {
     }
     
     public void registrarPersona(Persona persona) {
-        // Aquí se pueden agregar validaciones
+
         if (persona.getNombre() == null || persona.getNombre().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
         }

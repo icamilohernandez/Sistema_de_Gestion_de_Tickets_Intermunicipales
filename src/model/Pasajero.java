@@ -6,8 +6,7 @@ public abstract class Pasajero extends Persona {
 
     private TipoPasajero tipo;
 
-    public Pasajero(String nombre, String cedula, int edad, 
-                    String sexo, String telefono, TipoPasajero tipo) {
+    public Pasajero(String nombre, String cedula, int edad, String sexo, String telefono, TipoPasajero tipo) {
         super(nombre, cedula, edad, sexo, telefono);
         this.tipo = tipo;
     }

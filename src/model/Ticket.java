@@ -12,8 +12,7 @@ public class Ticket implements Imprimible, Calculable {
     private String destino;
     private double valorFinal;
 
-    public Ticket(String codigo, Pasajero pasajero, Vehiculo vehiculo,
-                  String origen, String destino) {
+    public Ticket(String codigo, Pasajero pasajero, Vehiculo vehiculo, String origen, String destino) {
         this.codigo      = codigo;
         this.pasajero    = pasajero;
         this.vehiculo    = vehiculo;
@@ -21,18 +20,18 @@ public class Ticket implements Imprimible, Calculable {
         this.origen      = origen;
         this.destino     = destino;
         
-        double tarifa    = vehiculo.calTarifa();
-        double descuento = pasajero.calDescuento();
+    double tarifa    = vehiculo.calcularTarifa();
+    double descuento = pasajero.calDescuento();
         this.valorFinal  = tarifa - (tarifa * descuento);
     }
 
     @Override
-    public double calTotal() {
+    public double calcularTotal() {
         return valorFinal;
     }
 
     @Override
-    public void impriDtlle() {
+    public void imprimirDetalle() {
         System.out.println("=== TICKET ===");
         System.out.println("Codigo    : " + codigo);
         System.out.println("Pasajero  : " + pasajero.getNombre());
@@ -59,6 +58,18 @@ public class Ticket implements Imprimible, Calculable {
 
     public Vehiculo getVehiculo() {
         return vehiculo;
+    }
+
+    public Date getFechaCompra() {
+        return fechaCompra;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public String getDestino() {
+        return destino;
     }
 
     public double getValorFinal() {
