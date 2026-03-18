@@ -4,10 +4,13 @@
  */
 package service;
 
-/**
- *
- * @author ivanc
- */
-public class PersonaService {
-    
+import model.Persona;
+import java.util.List;
+
+public interface PersonaService {
+    void registrarPersona(Persona persona);
+    Persona buscarPersona(String id);
+    List<Persona> listarPersonas();
+    void actualizarPersona(Persona persona);
+    void eliminarPersona(String id);
 }
