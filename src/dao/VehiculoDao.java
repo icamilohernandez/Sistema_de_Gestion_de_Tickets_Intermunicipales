@@ -82,8 +82,6 @@ public class VehiculoDao {
         }
     }
 
-    // ── Métodos auxiliares ──────────────────────────────────────────
-
     private String vehiculoToLinea(Vehiculo v) {
         return v.getClass().getSimpleName() + ";" +
                v.getPlaca() + ";" +
