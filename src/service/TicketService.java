@@ -40,5 +40,72 @@ public class TicketService {
         double descuento  = pasajero.calDescuento();
         double valorFinal = tarifaBase - (tarifaBase * descuento);
         
+        Ticket ticket = new Ticket(pasajero, vehiculo, origen, destino, valorFinal);
+        ticketDao.guardar(ticket);
+
+        vehiculoService.actualizarCupos(placaVehiculo);
+
+        return "Ticket vendido exitosamente. Valor: $" + valorFinal;
+    }
+
+    public List<Ticket> listarTickets() {
+        return ticketDao.listarTodos();
+    }
+
+    public Ticket buscarTicket(String id) {
+        Ticket t = ticketDao.buscarPorCodigo(id);
+        if (t == null) {
+            System.out.println("No se encontro el ticket con id: " + id);
+        }
+        return t;
+    }
+
+    // ESTADISTICAS
+    public double calcularTotalRecaudado() {
+        double total = 0;
+        for (Ticket t : ticketDao.listarTodos()) {
+            total += t.getValorFinal();
+        }
+        return total;
+    }
+
+    public void mostrarEstadisticas() {
+        List<Ticket> tickets = ticketDao.listarTodos();
+
+        // Total recaudado
+        System.out.println("Total recaudado: $" + calcularTotalRecaudado());
+
+        // Pasajeros por tipo
+        int regular = 0, estudiante = 0, adultoMayor = 0;
+        for (Ticket t : tickets) {
+            switch (t.getPasajero().getTipo()) {
+                case Regular      regular++;      break;
+                case Estudiante:   estudiante++;   break;
+                case AdultoMayor: adultoMayor++;  break;
+            }
+        }
+        System.out.println("Pasajeros regulares:     " + regular);
+        System.out.println("Pasajeros estudiantes:   " + estudiante);
+        System.out.println("Pasajeros adulto mayor:  " + adultoMayor);
+
+        // Vehiculo con mas tickets
+        Vehiculo vehiculoTop = null;
+        int maxTickets = 0;
+        for (Ticket t : tickets) {
+            int count = 0;
+            for (Ticket t2 : tickets) {
+                if (t2.getVehiculo().getPlaca().equals(t.getVehiculo().getPlaca())) {
+                    count++;
+                }
+            }
+            if (count > maxTickets) {
+                maxTickets = count;
+                vehiculoTop = t.getVehiculo();
+            }
+        }
+        if (vehiculoTop != null) {
+            System.out.println("Vehiculo con mas tickets: " + vehiculoTop.getPlaca() 
+                             + " con " + maxTickets + " tickets");
+        }
     }
 }
