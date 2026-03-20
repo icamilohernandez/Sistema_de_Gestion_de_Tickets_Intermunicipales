@@ -1,11 +1,16 @@
 package view;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Vehiculo;
 import model.Conductor;
 import model.Pasajero;
+import model.PasajeroAdultoMayor;
+import model.PasajeroEstudiante;
+import model.PasajeroRegular;
 import model.Ticket;
 import service.VehiculoService;
 import service.PersonaService;
@@ -92,16 +97,54 @@ public class Menu {
         System.out.println(personaService.registrarConductor(conductores, cedula, nombre, licencia, categoria));
     }
     
-    private void registrarPasajero() {
-        sc.nextLine();
-        System.out.print("Cedula: ");
-        String cedula = sc.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-        System.out.println("Tipo: 1.Regular  2.Estudiante  3.Adulto Mayor");
+   private void registrarPasajero() {
+    sc.nextLine();
+    System.out.println("\n--- REGISTRAR PASAJERO ---");
+    System.out.print("Cédula: ");
+    String cedula = sc.nextLine();
+    System.out.print("Nombre: ");
+    String nombre = sc.nextLine();
+    System.out.print("Edad: ");
+    int edad = sc.nextInt();
+    sc.nextLine();
+    System.out.print("Sexo (M/F): ");
+    String sexo = sc.nextLine();
+    System.out.print("Teléfono: ");
+    String telefono = sc.nextLine();
+
+    System.out.print("Año de nacimiento (YYYY): ");
+    int anio = sc.nextInt();
+    System.out.print("Mes de nacimiento (1-12): ");
+    int mes = sc.nextInt();
+    System.out.print("Día de nacimiento: ");
+    int dia = sc.nextInt();
+    sc.nextLine();
+    
+    LocalDate fechaNacimiento = LocalDate.of(anio, mes, dia);
+    
+
+    int edadCalculada = Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    Pasajero pasajero;
+    
+    if (edadCalculada >= 60) {
+        pasajero = new PasajeroAdultoMayor(nombre, cedula, edad, sexo, telefono, fechaNacimiento);
+        System.out.println("Pasajero registrado como Adulto Mayor (descuento 30%)");
+    } else {
+        System.out.println("Tipo de pasajero: 1. Regular  2. Estudiante");
         int tipo = sc.nextInt();
-        System.out.println(personaService.registrarPasajero(pasajeros, cedula, nombre, tipo));
+        sc.nextLine();
+        if (tipo == 2) {
+            pasajero = new PasajeroEstudiante(nombre, cedula, edad, sexo, telefono, fechaNacimiento);
+            System.out.println("Pasajero registrado como Estudiante (descuento 15%)");
+        } else {
+            pasajero = new PasajeroRegular(nombre, cedula, edad, sexo, telefono, fechaNacimiento);
+            System.out.println("Pasajero registrado como Regular (sin descuento)");
+        }
     }
+    
+    personaService.registrarPersona(pasajero);
+    System.out.println("Pasajero registrado exitosamente.");
+}
 
     private void venderTicket() {
         sc.nextLine();

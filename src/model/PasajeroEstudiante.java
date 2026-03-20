@@ -1,19 +1,35 @@
 package model;
 
+import java.time.LocalDate;
+
 public class PasajeroEstudiante extends Pasajero {
-    
-    public PasajeroEstudiante(String nombre, String cedula, int edad, String sexo, String telefono) {
-        super(nombre, cedula, String.valueOf(edad), sexo, telefono);
+
+    public PasajeroEstudiante(String nombre, String cedula, int edad,
+                               String sexo, String telefono, LocalDate fechaNacimiento) {
+        super(nombre, cedula, edad, sexo, telefono, TipoPasajero.Estudiante, fechaNacimiento);
     }
-    
+
     @Override
-    public double calcularTarifa(double distancia) {
-        // Estudiante: 50% descuento
-        return distancia * 50;
+    public double calcularDescuento() {
+        return 0.15;
     }
-    
+
     @Override
-    public String getTipoPasajero() {
-        return "Estudiante";
+    public void verEstadisticas() {
+        System.out.println("Tipo: Estudiante | Descuento: 15%");
+    }
+
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("=== ESTUDIANTE ===");
+        System.out.println("Cedula   : " + getCedula());
+        System.out.println("Nombre   : " + getNombre());
+        System.out.println("Edad     : " + calcularEdad());
+        System.out.println("Descuento: 15%");
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante | " + super.toString();
     }
 }
