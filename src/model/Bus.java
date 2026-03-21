@@ -2,34 +2,26 @@ package model;
 
 public class Bus extends Vehiculo implements Imprimible {
 
-    private double tarifa = 15000;
+    private static final double TARIFA_BASE = 15000;
 
-    public Bus() {
-        super();
-    }
+    public Bus() { super(); }
 
-    public Bus(String placa, String ruta) {
-        super(placa, ruta, 45, 0, true); 
-    }
-    
-    public double getTarifa() {
-        return tarifa;
+    public Bus(String placa, Ruta ruta) {
+        super(placa, ruta, 45, 0, true);
     }
 
     @Override
-    public double calcularTarifa() {
-        return tarifa;
-    }
+    public double calcularTarifa() { return TARIFA_BASE; }
 
     @Override
     public void imprimirDetalle() {
         System.out.println("=== BUS ===");
-        System.out.println("Placa      : " + getPlaca());
-        System.out.println("Ruta       : " + getRuta());
-        System.out.println("Capacidad  : " + getCapacidadMax());
-        System.out.println("Pasajeros  : " + getPasajerosActuales());
-        System.out.println("Tarifa     : $" + calcularTarifa());
-        System.out.println("Disponible : " + isDisponible());
+        System.out.println("Placa     : " + getPlaca());
+        System.out.println("Ruta      : " + (getRuta() != null ? getRuta() : "Sin ruta"));
+        System.out.println("Capacidad : " + getCapacidadMax());
+        System.out.println("Pasajeros : " + getPasajerosActuales());
+        System.out.println("Tarifa    : $" + calcularTarifa());
+        System.out.println("Disponible: " + isDisponible());
     }
 
     @Override

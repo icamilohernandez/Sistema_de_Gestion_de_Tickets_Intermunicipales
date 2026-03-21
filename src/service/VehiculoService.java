@@ -1,14 +1,11 @@
 package service;
 
 import dao.VehiculoDao;
-import dao.ReservaDAO;
 import model.Buseta;
 import model.Bus;
 import model.MicroBus;
 import model.Ruta;
 import model.Vehiculo;
-import model.Reserva;
-import model.EstadoReserva;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +14,14 @@ public class VehiculoService {
     private VehiculoDao vehiculoDao;
     private ReservaDAO reservaDAO = new ReservaDAO();
 
+    private static final List<Ruta> rutasDisponibles = new ArrayList<>();
+    static {
+        rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
+        rutasDisponibles.add(new Ruta("R002", "Bogota",   "Cali",      510, 540));
+        rutasDisponibles.add(new Ruta("R003", "Medellin", "Cartagena", 650, 720));
+    }
+
+    // Rutas disponibles para asignar al registrar
     private static final List<Ruta> rutasDisponibles = new ArrayList<>();
     static {
         rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
@@ -33,6 +38,7 @@ public class VehiculoService {
     }
 
     public void registrar(String placa, String codigoRuta, String modelo) {
+        // Buscar la ruta por código
         Ruta ruta = null;
         for (Ruta r : rutasDisponibles) {
             if (r.getCodigoRuta().equalsIgnoreCase(codigoRuta)) {
@@ -45,6 +51,7 @@ public class VehiculoService {
             for (Ruta r : rutasDisponibles) System.out.println("  " + r);
             return;
         }
+
         Vehiculo vehiculo;
         switch (modelo.toLowerCase()) {
             case "buseta":   vehiculo = new Buseta(placa, ruta);   break;
