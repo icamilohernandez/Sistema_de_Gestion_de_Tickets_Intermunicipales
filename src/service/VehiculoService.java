@@ -111,4 +111,12 @@ public class VehiculoService {
 public boolean esFestivo(LocalDate fecha) {
     return festivos.contains(fecha);
 }
+public double calcularTarifaConFestivo(Vehiculo vehiculo, LocalDate fecha) {
+    double tarifa = vehiculo.calcularTarifa();
+    if (esFestivo(fecha)) {
+        tarifa = tarifa * 1.20;
+        System.out.println("Dia festivo detectado. Tarifa incrementada un 20%.");
+    }
+    return tarifa;
+}
 }
