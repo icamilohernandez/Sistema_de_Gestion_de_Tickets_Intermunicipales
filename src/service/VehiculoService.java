@@ -12,6 +12,14 @@ import java.util.List;
 public class VehiculoService {
 
     private VehiculoDao vehiculoDao;
+    private ReservaDAO reservaDAO = new ReservaDAO();
+
+    private static final List<Ruta> rutasDisponibles = new ArrayList<>();
+    static {
+        rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
+        rutasDisponibles.add(new Ruta("R002", "Bogota",   "Cali",      510, 540));
+        rutasDisponibles.add(new Ruta("R003", "Medellin", "Cartagena", 650, 720));
+    }
 
     // Rutas disponibles para asignar al registrar
     private static final List<Ruta> rutasDisponibles = new ArrayList<>();
@@ -79,10 +87,22 @@ public class VehiculoService {
         return v;
     }
 
+    public int contarReservasActivas(String placa) {
+        int count = 0;
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
+                r.getEstado().equals(EstadoReserva.ACTIVA)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean verificarDisponibilidad(String placa) {
         Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
         if (v == null) return false;
-        return v.getPasajerosActuales() < v.getCapacidadMax();
+        int ocupados = v.getPasajerosActuales() + contarReservasActivas(placa);
+        return ocupados < v.getCapacidadMax();
     }
 
     public void actualizarCupos(String placa) {
