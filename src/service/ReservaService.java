@@ -13,20 +13,23 @@ public class ReservaService {
     private ReservaDAO reservaDAO;
     private VehiculoService vehiculoService;
     private PersonaService personaService;
+    private TicketService ticketService;
 
     private static int contador = 1;
 
-    public ReservaService(PersonaService personaService, VehiculoService vehiculoService) {
+    public ReservaService(PersonaService personaService, VehiculoService vehiculoService, TicketService ticketService) {
         this.reservaDAO      = new ReservaDAOImpl();
         this.personaService  = personaService;
         this.vehiculoService = vehiculoService;
+        this.ticketService   = ticketService;
     }
 
-    
+    // Commit 2: Validar capacidad del vehiculo
     private boolean validarCapacidad(String placaVehiculo) {
         return vehiculoService.verificarDisponibilidad(placaVehiculo);
     }
 
+    // Commit 3: Validar reserva duplicada por pasajero
     private boolean tieneReservaActiva(String cedula, String placa, LocalDate fechaViaje) {
         for (Reserva r : reservaDAO.listarTodas()) {
             if (r.getPasajero() == null || r.getVehiculo() == null) continue;
@@ -40,7 +43,7 @@ public class ReservaService {
         return false;
     }
 
- 
+    // Commit 4: Crear reserva
     public String crearReserva(String cedula, String placaVehiculo, LocalDate fechaViaje) {
         Pasajero pasajero = (Pasajero) personaService.buscarPersona(cedula);
         if (pasajero == null) {
@@ -72,7 +75,8 @@ public class ReservaService {
                "  Vehiculo:    " + placaVehiculo + "\n" +
                "  Fecha viaje: " + fechaViaje;
     }
-    
+
+    // Commit 5: Cancelar reserva
     public String cancelarReserva(String codigo) {
         Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
         if (reserva == null) {
@@ -84,5 +88,27 @@ public class ReservaService {
         reserva.setEstado(EstadoReserva.CANCELADA);
         reservaDAO.actualizar(reserva);
         return "Reserva " + codigo + " cancelada exitosamente.";
+    }
+
+    // Commit 6: Convertir reserva en ticket
+    public String convertirEnTicket(String codigoReserva, String origen, String destino) {
+        Reserva reserva = reservaDAO.buscarPorCodigo(codigoReserva);
+        if (reserva == null) {
+            return "Error: no se encontro la reserva con codigo " + codigoReserva;
+        }
+        if (!reserva.getEstado().equals(EstadoReserva.ACTIVA)) {
+            return "Error: la reserva no esta activa (estado: " + reserva.getEstado() + ")";
+        }
+
+        String resultado = ticketService.venderTicket(
+            reserva.getPasajero().getCedula(),
+            reserva.getVehiculo().getPlaca(),
+            origen, destino
+        );
+
+        reserva.setEstado(EstadoReserva.CONVERTIDA);
+        reservaDAO.actualizar(reserva);
+
+        return "Reserva convertida en ticket.\n" + resultado;
     }
 }
