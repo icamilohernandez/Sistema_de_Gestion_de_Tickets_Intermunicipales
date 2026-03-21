@@ -5,11 +5,14 @@ import java.time.Period;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.ReservaDAO;
 import model.Conductor;
+import model.EstadoReserva;
 import model.Pasajero;
 import model.PasajeroAdultoMayor;
 import model.PasajeroEstudiante;
 import model.PasajeroRegular;
+import model.Reserva;
 import model.Ticket;
 import model.Vehiculo;
 import service.PersonaService;
@@ -23,6 +26,7 @@ public class Menu {
     private VehiculoService vehiculoService = new VehiculoService();
     private PersonaService  personaService  = new PersonaService();
     private TicketService   ticketService   = new TicketService(personaService, vehiculoService);
+    private ReservaDAO      reservaDAO      = new ReservaDAO();
 
     public void mostrar() {
         int op;
@@ -36,6 +40,7 @@ public class Menu {
             System.out.println("6. Listar tickets");
             System.out.println("7. Estadisticas");
             System.out.println("8. Reportes");
+            System.out.println("9. Reservas");
             System.out.println("0. Salir");
             System.out.print("Opcion: ");
             op = sc.nextInt();
@@ -49,6 +54,7 @@ public class Menu {
                 case 6: listaTickets();       break;
                 case 7: verEstadisticas();    break;
                 case 8: menuReportes();       break;
+                case 9: menuReservas();       break;
                 case 0: System.out.println("Adios, gracias por usar nuestro sistema"); break;
                 default: System.out.println("Opcion no valida");
             }
@@ -227,5 +233,32 @@ public class Menu {
     private void resumenDiaActual() {
         System.out.println("\n===== Resumen del dia actual =====");
         ticketService.resumenDiaActual();
+    }
+
+    private void menuReservas() {
+        int opcion;
+        do {
+            System.out.println("\n===== Reservas =====");
+            System.out.println("1. Crear reserva");
+            System.out.println("2. Cancelar reserva");
+            System.out.println("3. Listar reservas activas");
+            System.out.println("4. Historial de reservas de un pasajero");
+            System.out.println("5. Convertir reserva en ticket");
+            System.out.println("6. Verificar reservas vencidas");
+            System.out.println("0. Volver");
+            System.out.print("Opcion: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1: crearReserva();            break;
+                case 2: cancelarReserva();         break;
+                case 3: listarReservasActivas();   break;
+                case 4: historialPasajero();       break;
+                case 5: convertirReservaATicket(); break;
+                case 6: verificarVencidas();       break;
+                case 0: System.out.println("Volviendo al menu principal..."); break;
+                default: System.out.println("Opcion invalida");
+            }
+        } while (opcion != 0);
     }
 }
