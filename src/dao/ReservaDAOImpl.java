@@ -5,11 +5,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import model.EstadoReserva;
+import model.Pasajero;
+import model.Persona;
 import model.Reserva;
+import model.Vehiculo;
 
 public class ReservaDAOImpl implements ReservaDAO {
 
     private static final String ARCHIVO = "reservas.txt";
+
+    private dao.PersonaDao personaDao;
+    private dao.VehiculoDao vehiculoDao;
+
+    public ReservaDAOImpl() {
+        this.personaDao  = new dao.PersonaDao();
+        this.vehiculoDao = new dao.VehiculoDao();
+    }
 
     @Override
     public void guardar(Reserva reserva) {
@@ -95,12 +106,10 @@ public class ReservaDAOImpl implements ReservaDAO {
     }
 
     private String reservaToLinea(Reserva r) {
-        return r.getCodigo() + ";" +
-               r.getPasajero().getCedula() + ";" +
-               r.getVehiculo().getPlaca() + ";" +
-               r.getFechaCreacion() + ";" +
-               r.getFechaViaje() + ";" +
-               r.getEstado();
+        String cedula = r.getPasajero() != null ? r.getPasajero().getCedula() : "N/A";
+        String placa  = r.getVehiculo() != null ? r.getVehiculo().getPlaca()  : "N/A";
+        return r.getCodigo() + ";" + cedula + ";" + placa + ";" +
+               r.getFechaCreacion() + ";" + r.getFechaViaje() + ";" + r.getEstado();
     }
 
     private Reserva lineaToReserva(String linea) {
@@ -111,6 +120,16 @@ public class ReservaDAOImpl implements ReservaDAO {
         r.setFechaCreacion(LocalDate.parse(campos[3]));
         r.setFechaViaje(LocalDate.parse(campos[4]));
         r.setEstado(campos[5]);
+
+        Persona persona = personaDao.buscarPorId(campos[1]);
+        if (persona instanceof Pasajero) {
+            r.setPasajero((Pasajero) persona);
+        }
+
+       
+        Vehiculo vehiculo = vehiculoDao.buscarPorPlaca(campos[2]);
+        r.setVehiculo(vehiculo);
+
         return r;
     }
 }

@@ -2,10 +2,12 @@ package view;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import dao.ReservaDAO;
+import dao.ReservaDAOImpl;
 import model.Conductor;
 import model.EstadoReserva;
 import model.Pasajero;
@@ -26,7 +28,10 @@ public class Menu {
     private VehiculoService vehiculoService = new VehiculoService();
     private PersonaService  personaService  = new PersonaService();
     private TicketService   ticketService   = new TicketService(personaService, vehiculoService);
-    private ReservaDAO      reservaDAO      = new ReservaDAO();
+    private ReservaDAO      reservaDAO      = new ReservaDAOImpl();
+
+    // Lista en memoria para mantener referencias completas de reservas
+    private List<Reserva> reservasEnMemoria = new ArrayList<>();
 
     public void mostrar() {
         int op;
@@ -81,9 +86,7 @@ public class Menu {
             return;
         }
         System.out.println("Lista de Vehiculos:");
-        for (Vehiculo v : vehiculos) {
-            System.out.println(v);
-        }
+        for (Vehiculo v : vehiculos) System.out.println(v);
     }
 
     private void registrarConductor() {
@@ -134,8 +137,6 @@ public class Menu {
         int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
 
         Pasajero pasajero;
-
-        // El sistema determina automaticamente si es Adulto Mayor
         if (edad >= 60) {
             pasajero = new PasajeroAdultoMayor(nombre, cedula, edad, sexo, telefono, fechaNacimiento);
             System.out.println("Pasajero registrado automaticamente como Adulto Mayor (descuento 30%) - edad: " + edad);
@@ -151,7 +152,6 @@ public class Menu {
                 System.out.println("Pasajero registrado como Regular (sin descuento)");
             }
         }
-
         personaService.registrarPersona(pasajero);
         System.out.println("Pasajero registrado exitosamente.");
     }
@@ -171,14 +171,9 @@ public class Menu {
 
     private void listaTickets() {
         List<Ticket> tickets = ticketService.listarTickets();
-        if (tickets.isEmpty()) {
-            System.out.println("No hay tickets vendidos");
-            return;
-        }
+        if (tickets.isEmpty()) { System.out.println("No hay tickets vendidos"); return; }
         System.out.println("Lista de Tickets:");
-        for (Ticket t : tickets) {
-            System.out.println(t);
-        }
+        for (Ticket t : tickets) System.out.println(t);
     }
 
     private void verEstadisticas() {
@@ -196,7 +191,6 @@ public class Menu {
             System.out.println("0. Volver");
             System.out.print("Opcion: ");
             opcion = sc.nextInt();
-
             switch (opcion) {
                 case 1: reporteFecha();        break;
                 case 2: reporteTipoVehiculo(); break;
@@ -212,29 +206,26 @@ public class Menu {
         sc.nextLine();
         System.out.print("Ingrese la fecha (dd/MM/yyyy): ");
         String fecha = sc.nextLine();
-        System.out.println("\n===== Tickets del " + fecha + " =====");
         ticketService.reporteFecha(fecha);
     }
 
     private void reporteTipoVehiculo() {
         System.out.println("Tipo de vehiculo: 1.Buseta  2.MicroBus  3.Bus");
         int tipo = sc.nextInt();
-        System.out.println("\n===== Tickets por tipo de vehiculo =====");
         ticketService.reporteTipoVehiculo(tipo);
     }
 
     private void reporteTipoPasajero() {
         System.out.println("Tipo de pasajero: 1.Regular  2.Estudiante  3.Adulto Mayor");
         int tipo = sc.nextInt();
-        System.out.println("\n===== Tickets por tipo de pasajero =====");
         ticketService.reporteTipoPasajero(tipo);
     }
 
     private void resumenDiaActual() {
-        System.out.println("\n===== Resumen del dia actual =====");
         ticketService.resumenDiaActual();
     }
 
+    // ── Submenú Reservas ─────────────────────────────────────────────
     private void menuReservas() {
         int opcion;
         do {
@@ -248,7 +239,6 @@ public class Menu {
             System.out.println("0. Volver");
             System.out.print("Opcion: ");
             opcion = sc.nextInt();
-
             switch (opcion) {
                 case 1: crearReserva();            break;
                 case 2: cancelarReserva();         break;
@@ -296,7 +286,15 @@ public class Menu {
                                       LocalDate.now(), fechaViaje,
                                       EstadoReserva.ACTIVA);
         reservaDAO.guardar(reserva);
+        reservasEnMemoria.add(reserva); // guardar en memoria
         System.out.println("Reserva creada exitosamente. Codigo: " + codigo);
+    }
+
+    private Reserva buscarReservaEnMemoria(String codigo) {
+        for (Reserva r : reservasEnMemoria) {
+            if (r.getCodigo().equalsIgnoreCase(codigo)) return r;
+        }
+        return null;
     }
 
     private void cancelarReserva() {
@@ -305,7 +303,7 @@ public class Menu {
         System.out.print("Codigo de la reserva: ");
         String codigo = sc.nextLine();
 
-        Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
+        Reserva reserva = buscarReservaEnMemoria(codigo);
         if (reserva == null) {
             System.out.println("No se encontro la reserva con codigo: " + codigo);
             return;
@@ -314,7 +312,6 @@ public class Menu {
             System.out.println("La reserva ya esta cancelada.");
             return;
         }
-
         reserva.setEstado(EstadoReserva.CANCELADA);
         reservaDAO.actualizar(reserva);
         System.out.println("Reserva " + codigo + " cancelada exitosamente.");
@@ -323,7 +320,7 @@ public class Menu {
     private void listarReservasActivas() {
         System.out.println("\n--- Reservas Activas ---");
         boolean hayActivas = false;
-        for (Reserva r : reservaDAO.listarTodas()) {
+        for (Reserva r : reservasEnMemoria) {
             if (r.getEstado().equals(EstadoReserva.ACTIVA)) {
                 r.imprimirDetalle();
                 System.out.println("---");
@@ -340,7 +337,7 @@ public class Menu {
         String cedula = sc.nextLine();
 
         boolean encontrado = false;
-        for (Reserva r : reservaDAO.listarTodas()) {
+        for (Reserva r : reservasEnMemoria) {
             if (r.getPasajero() != null &&
                 r.getPasajero().getCedula().equalsIgnoreCase(cedula)) {
                 r.imprimirDetalle();
@@ -357,7 +354,7 @@ public class Menu {
         System.out.print("Codigo de la reserva: ");
         String codigo = sc.nextLine();
 
-        Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
+        Reserva reserva = buscarReservaEnMemoria(codigo);
         if (reserva == null) {
             System.out.println("No se encontro la reserva con codigo: " + codigo);
             return;
@@ -387,9 +384,8 @@ public class Menu {
 
     private void verificarVencidas() {
         System.out.println("\n--- Verificar Reservas Vencidas ---");
-        List<Reserva> lista = reservaDAO.listarTodas();
         int vencidas = 0;
-        for (Reserva r : lista) {
+        for (Reserva r : reservasEnMemoria) {
             if (r.getEstado().equals(EstadoReserva.ACTIVA)) {
                 long dias = java.time.temporal.ChronoUnit.DAYS.between(
                     r.getFechaCreacion(), LocalDate.now()
@@ -407,5 +403,4 @@ public class Menu {
             System.out.println("No hay reservas vencidas.");
         }
     }
-
 }
