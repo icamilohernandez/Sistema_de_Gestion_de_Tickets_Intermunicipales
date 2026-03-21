@@ -5,8 +5,7 @@
 package model;
 
 import java.time.LocalDate;
-
-public class Reserva {
+public class Reserva implements Imprimible {
 
     private String codigo;
     private Pasajero pasajero;
@@ -81,5 +80,15 @@ public class Reserva {
                " | Fecha Creacion: " + fechaCreacion +
                " | Fecha Viaje: " + fechaViaje +
                " | Estado: " + estado;
+    }
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("=== RESERVA ===");
+        System.out.println("Codigo       : " + codigo);
+        System.out.println("Pasajero     : " + pasajero.getNombre());
+        System.out.println("Vehiculo     : " + vehiculo.getPlaca());
+        System.out.println("Fecha Creacion: " + fechaCreacion);
+        System.out.println("Fecha Viaje  : " + fechaViaje);
+        System.out.println("Estado       : " + estado);
     }
 }
