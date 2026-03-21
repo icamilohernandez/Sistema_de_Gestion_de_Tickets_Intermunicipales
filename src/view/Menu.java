@@ -24,6 +24,11 @@ public class Menu {
     private TicketService   ticketService   = new TicketService();
 
     public void mostrar() {
+
+        vehiculoService.cargarDatos(vehiculos);
+        personaService.cargarDatos(conductores, pasajeros);
+        ticketService.cargarDatos(tickets);
+
         int op;
         do {
             System.out.println("TransCesar S.A.S");
@@ -34,6 +39,7 @@ public class Menu {
             System.out.println("5. Vender ticket");
             System.out.println("6. Listar tickets");
             System.out.println("7. Estadisticas");
+            System.out.println("8. Reportes");
             System.out.println("0. Salir");
             System.out.print("Opcion: ");
             op = sc.nextInt();
@@ -46,8 +52,9 @@ public class Menu {
                 case 5: venderTicket(); break;
                 case 6: listaTickets(); break;
                 case 7: verEstadisticas(); break;
-                case 0: System.out.println("Adios"); break;
-                default: System.out.println("Opcion invalida");
+                case 8: menuReportes(); break;
+                case 0: System.out.println("Adios, gracias por usar nuestro sistema"); break;
+                default: System.out.println("Opcion no valida");
             }
 
         } while (op != 0);
@@ -133,6 +140,29 @@ public class Menu {
         System.out.println("Total de conductores: " + conductores.size());
         System.out.println("Total de pasajeros: " + pasajeros.size());
         System.out.println("Total de tickets vendidos: " + tickets.size());
+    }
+
+    private void menuReportes() {
+        int opcion;
+        do {
+            System.out.println("\n===== Reportes =====");
+            System.out.println("1. Tickets por fecha");
+            System.out.println("2. Tickets por tipo de vehiculo");
+            System.out.println("3. Tickets por tipo de pasajero");
+            System.out.println("4. Resumen del dia actual");
+            System.out.println("0. Volver");
+            System.out.print("Opcion: ");
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1: reportePorFecha();        break;
+                case 2: reportePorTipoVehiculo(); break;
+                case 3: reportePorTipoPasajero(); break;
+                case 4: resumenDiaActual();        break;
+                case 0: System.out.println("Volviendo al menu principal..."); break;
+                default: System.out.println("Opcion invalida");
+            }
+        } while (opcion != 0);
     }
 
 }
