@@ -7,6 +7,7 @@ import model.Pasajero;
 import model.Reserva;
 import model.Vehiculo;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,12 +27,12 @@ public class ReservaService {
         this.ticketService   = ticketService;
     }
 
-    // Commit 2: Validar capacidad del vehiculo
+  
     private boolean validarCapacidad(String placaVehiculo) {
         return vehiculoService.verificarDisponibilidad(placaVehiculo);
     }
 
-    // Commit 3: Validar reserva duplicada por pasajero
+  
     private boolean tieneReservaActiva(String cedula, String placa, LocalDate fechaViaje) {
         for (Reserva r : reservaDAO.listarTodas()) {
             if (r.getPasajero() == null || r.getVehiculo() == null) continue;
@@ -45,7 +46,7 @@ public class ReservaService {
         return false;
     }
 
-    // Commit 4: Crear reserva
+
     public String crearReserva(String cedula, String placaVehiculo, LocalDate fechaViaje) {
         Pasajero pasajero = (Pasajero) personaService.buscarPersona(cedula);
         if (pasajero == null) {
@@ -78,7 +79,6 @@ public class ReservaService {
                "  Fecha viaje: " + fechaViaje;
     }
 
-    // Commit 5: Cancelar reserva
     public String cancelarReserva(String codigo) {
         Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
         if (reserva == null) {
@@ -92,7 +92,7 @@ public class ReservaService {
         return "Reserva " + codigo + " cancelada exitosamente.";
     }
 
-    // Commit 6: Convertir reserva en ticket
+
     public String convertirEnTicket(String codigoReserva, String origen, String destino) {
         Reserva reserva = reservaDAO.buscarPorCodigo(codigoReserva);
         if (reserva == null) {
@@ -132,5 +132,24 @@ public class ReservaService {
         return vencidas > 0
             ? vencidas + " reserva(s) vencidas canceladas automaticamente."
             : "No hay reservas vencidas.";
+    }
+
+    public List<Reserva> listarReservasActivas() {
+        List<Reserva> activas = new ArrayList<>();
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getEstado().equals(EstadoReserva.ACTIVA)) activas.add(r);
+        }
+        return activas;
+    }
+
+    public List<Reserva> historialPorPasajero(String cedula) {
+        List<Reserva> historial = new ArrayList<>();
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getPasajero() != null &&
+                r.getPasajero().getCedula().equals(cedula)) {
+                historial.add(r);
+            }
+        }
+        return historial;
     }
 }
