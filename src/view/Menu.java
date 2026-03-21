@@ -261,4 +261,41 @@ public class Menu {
             }
         } while (opcion != 0);
     }
+
+    private void crearReserva() {
+        sc.nextLine();
+        System.out.println("\n--- Crear Reserva ---");
+        System.out.print("Cedula del pasajero: ");
+        String cedula = sc.nextLine();
+
+        Pasajero pasajero = (Pasajero) personaService.buscarPersona(cedula);
+        if (pasajero == null) {
+            System.out.println("Error: no se encontro el pasajero con cedula " + cedula);
+            return;
+        }
+
+        System.out.print("Placa del vehiculo: ");
+        String placa = sc.nextLine();
+
+        Vehiculo vehiculo = vehiculoService.buscarVehiculoPorPlaca(placa);
+        if (vehiculo == null) {
+            System.out.println("Error: no se encontro el vehiculo con placa " + placa);
+            return;
+        }
+
+        if (!vehiculoService.verificarDisponibilidad(placa)) {
+            System.out.println("Error: el vehiculo no tiene cupos disponibles.");
+            return;
+        }
+
+        System.out.print("Fecha del viaje (YYYY-MM-DD): ");
+        LocalDate fechaViaje = LocalDate.parse(sc.nextLine());
+
+        String codigo = "RES" + System.currentTimeMillis();
+        Reserva reserva = new Reserva(codigo, pasajero, vehiculo,
+                                      LocalDate.now(), fechaViaje,
+                                      EstadoReserva.ACTIVA);
+        reservaDAO.guardar(reserva);
+        System.out.println("Reserva creada exitosamente. Codigo: " + codigo);
+    }
 }
