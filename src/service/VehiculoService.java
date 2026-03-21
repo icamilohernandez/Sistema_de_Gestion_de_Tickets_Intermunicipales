@@ -1,9 +1,13 @@
 package service;
 
+import dao.ReservaDAO;
+import dao.ReservaDAOImpl;
 import dao.VehiculoDao;
 import model.Buseta;
 import model.Bus;
+import model.EstadoReserva;
 import model.MicroBus;
+import model.Reserva;
 import model.Ruta;
 import model.Vehiculo;
 import java.util.ArrayList;
@@ -12,16 +16,8 @@ import java.util.List;
 public class VehiculoService {
 
     private VehiculoDao vehiculoDao;
-    private ReservaDAO reservaDAO = new ReservaDAO();
+    private ReservaDAO reservaDAO;
 
-    private static final List<Ruta> rutasDisponibles = new ArrayList<>();
-    static {
-        rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
-        rutasDisponibles.add(new Ruta("R002", "Bogota",   "Cali",      510, 540));
-        rutasDisponibles.add(new Ruta("R003", "Medellin", "Cartagena", 650, 720));
-    }
-
-    // Rutas disponibles para asignar al registrar
     private static final List<Ruta> rutasDisponibles = new ArrayList<>();
     static {
         rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
@@ -31,6 +27,7 @@ public class VehiculoService {
 
     public VehiculoService() {
         this.vehiculoDao = new VehiculoDao();
+        this.reservaDAO  = new ReservaDAOImpl();
     }
 
     public static List<Ruta> getRutasDisponibles() {
@@ -38,20 +35,15 @@ public class VehiculoService {
     }
 
     public void registrar(String placa, String codigoRuta, String modelo) {
-        // Buscar la ruta por código
         Ruta ruta = null;
         for (Ruta r : rutasDisponibles) {
-            if (r.getCodigoRuta().equalsIgnoreCase(codigoRuta)) {
-                ruta = r;
-                break;
-            }
+            if (r.getCodigoRuta().equalsIgnoreCase(codigoRuta)) { ruta = r; break; }
         }
         if (ruta == null) {
             System.out.println("Ruta no encontrada. Rutas disponibles:");
             for (Ruta r : rutasDisponibles) System.out.println("  " + r);
             return;
         }
-
         Vehiculo vehiculo;
         switch (modelo.toLowerCase()) {
             case "buseta":   vehiculo = new Buseta(placa, ruta);   break;
@@ -90,7 +82,8 @@ public class VehiculoService {
     public int contarReservasActivas(String placa) {
         int count = 0;
         for (Reserva r : reservaDAO.listarTodas()) {
-            if (r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
+            if (r.getVehiculo() != null &&
+                r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
                 r.getEstado().equals(EstadoReserva.ACTIVA)) {
                 count++;
             }
