@@ -1,23 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
-
-
-/**
- *
- * @author Csamu
- */
 package dao;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import model.Reserva;
 import model.EstadoReserva;
-import model.Pasajero;
-import model.Vehiculo;
+import model.Reserva;
 
 public class ReservaDAOImpl implements ReservaDAO {
 
@@ -63,11 +51,8 @@ public class ReservaDAOImpl implements ReservaDAO {
         List<Reserva> lista = listarTodas();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO, false))) {
             for (Reserva r : lista) {
-                if (r.getCodigo().equalsIgnoreCase(reserva.getCodigo())) {
-                    bw.write(reservaToLinea(reserva));
-                } else {
-                    bw.write(reservaToLinea(r));
-                }
+                bw.write(r.getCodigo().equalsIgnoreCase(reserva.getCodigo())
+                        ? reservaToLinea(reserva) : reservaToLinea(r));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -80,16 +65,35 @@ public class ReservaDAOImpl implements ReservaDAO {
         List<Reserva> lista = listarTodas();
         lista.removeIf(r -> r.getCodigo().equalsIgnoreCase(codigo));
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO, false))) {
-            for (Reserva r : lista) {
-                bw.write(reservaToLinea(r));
-                bw.newLine();
-            }
+            for (Reserva r : lista) { bw.write(reservaToLinea(r)); bw.newLine(); }
         } catch (IOException e) {
             System.out.println("Error al eliminar reserva: " + e.getMessage());
         }
     }
 
-    // ── Métodos auxiliares ──────────────────────────────
+    @Override
+    public List<Reserva> cargarYVerificarVencidas() {
+        List<Reserva> lista = listarTodas();
+        int vencidas = 0;
+        for (Reserva r : lista) {
+            if (r.getEstado().equals(EstadoReserva.ACTIVA)) {
+                long horas = java.time.temporal.ChronoUnit.HOURS.between(
+                    r.getFechaCreacion().atStartOfDay(),
+                    LocalDate.now().atStartOfDay()
+                );
+                if (horas > 24) {
+                    r.setEstado(EstadoReserva.CANCELADA);
+                    actualizar(r);
+                    vencidas++;
+                }
+            }
+        }
+        if (vencidas > 0) {
+            System.out.println(vencidas + " reserva(s) vencidas canceladas automaticamente.");
+        }
+        return lista;
+    }
+
     private String reservaToLinea(Reserva r) {
         return r.getCodigo() + ";" +
                r.getPasajero().getCedula() + ";" +
