@@ -298,4 +298,25 @@ public class Menu {
         reservaDAO.guardar(reserva);
         System.out.println("Reserva creada exitosamente. Codigo: " + codigo);
     }
+
+    private void cancelarReserva() {
+        sc.nextLine();
+        System.out.println("\n--- Cancelar Reserva ---");
+        System.out.print("Codigo de la reserva: ");
+        String codigo = sc.nextLine();
+
+        Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
+        if (reserva == null) {
+            System.out.println("No se encontro la reserva con codigo: " + codigo);
+            return;
+        }
+        if (reserva.getEstado().equals(EstadoReserva.CANCELADA)) {
+            System.out.println("La reserva ya esta cancelada.");
+            return;
+        }
+
+        reserva.setEstado(EstadoReserva.CANCELADA);
+        reservaDAO.actualizar(reserva);
+        System.out.println("Reserva " + codigo + " cancelada exitosamente.");
+    }
 }
