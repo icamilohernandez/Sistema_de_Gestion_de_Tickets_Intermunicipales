@@ -72,4 +72,17 @@ public class ReservaService {
                "  Vehiculo:    " + placaVehiculo + "\n" +
                "  Fecha viaje: " + fechaViaje;
     }
+    
+    public String cancelarReserva(String codigo) {
+        Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
+        if (reserva == null) {
+            return "Error: no se encontro la reserva con codigo " + codigo;
+        }
+        if (!reserva.getEstado().equals(EstadoReserva.ACTIVA)) {
+            return "Error: la reserva " + codigo + " no esta activa (estado: " + reserva.getEstado() + ")";
+        }
+        reserva.setEstado(EstadoReserva.CANCELADA);
+        reservaDAO.actualizar(reserva);
+        return "Reserva " + codigo + " cancelada exitosamente.";
+    }
 }
