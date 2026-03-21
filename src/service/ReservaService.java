@@ -7,6 +7,8 @@ import model.Pasajero;
 import model.Reserva;
 import model.Vehiculo;
 import java.time.LocalDate;
+import java.util.List;
+
 
 public class ReservaService {
 
@@ -110,5 +112,25 @@ public class ReservaService {
         reservaDAO.actualizar(reserva);
 
         return "Reserva convertida en ticket.\n" + resultado;
+    }
+
+    public String verificarReservasVencidas() {
+        List<Reserva> lista = reservaDAO.listarTodas();
+        int vencidas = 0;
+        for (Reserva r : lista) {
+            if (!r.getEstado().equals(EstadoReserva.ACTIVA)) continue;
+            long horas = java.time.temporal.ChronoUnit.HOURS.between(
+                r.getFechaCreacion().atStartOfDay(),
+                LocalDate.now().atStartOfDay()
+            );
+            if (horas > 24) {
+                r.setEstado(EstadoReserva.CANCELADA);
+                reservaDAO.actualizar(r);
+                vencidas++;
+            }
+        }
+        return vencidas > 0
+            ? vencidas + " reserva(s) vencidas canceladas automaticamente."
+            : "No hay reservas vencidas.";
     }
 }
