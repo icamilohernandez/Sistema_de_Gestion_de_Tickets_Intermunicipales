@@ -184,4 +184,20 @@ public class Menu {
         ticketService.reporteTipoVehiculo(tickets, tipo);
     }
 
-}
+    private void reporteTipoPasajero() {
+        System.out.println("Tipo de pasajero:");
+        System.out.println("1. Regular");
+        System.out.println("2. Estudiante");
+        System.out.println("3. Adulto Mayor");
+        System.out.print("Opcion: ");
+        int tipo = sc.nextInt();
+        System.out.println("\n===== Tickets por tipo de pasajero =====");
+        ticketService.reporteTipoPasajero(tickets, tipo);
+    }
+
+    private void resumenDiaActual() {
+        System.out.println("\n===== Resumen del dia actual =====");
+        ticketService.resumenDiaActual(tickets);
+    }
+
+}   
