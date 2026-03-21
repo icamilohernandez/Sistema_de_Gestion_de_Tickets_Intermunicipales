@@ -319,4 +319,17 @@ public class Menu {
         reservaDAO.actualizar(reserva);
         System.out.println("Reserva " + codigo + " cancelada exitosamente.");
     }
+
+    private void listarReservasActivas() {
+        System.out.println("\n--- Reservas Activas ---");
+        boolean hayActivas = false;
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getEstado().equals(EstadoReserva.ACTIVA)) {
+                r.imprimirDetalle();
+                System.out.println("---");
+                hayActivas = true;
+            }
+        }
+        if (!hayActivas) System.out.println("No hay reservas activas.");
+    }
 }
