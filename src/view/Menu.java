@@ -155,14 +155,33 @@ public class Menu {
             opcion = sc.nextInt();
 
             switch (opcion) {
-                case 1: reportePorFecha();        break;
-                case 2: reportePorTipoVehiculo(); break;
-                case 3: reportePorTipoPasajero(); break;
-                case 4: resumenDiaActual();        break;
+                case 1: reporteFecha();        break;
+                case 2: reporteTipoVehiculo(); break;
+                case 3: reporteTipoPasajero(); break;
+                case 4: resumenDiaActual();    break;
                 case 0: System.out.println("Volviendo al menu principal..."); break;
                 default: System.out.println("Opcion invalida");
             }
         } while (opcion != 0);
+    }
+
+    private void reporteFecha() {
+        sc.nextLine();
+        System.out.print("Ingrese la fecha (dd/MM/yyyy): ");
+        String fecha = sc.nextLine();
+        System.out.println("\n===== Tickets del " + fecha + " =====");
+        ticketService.reporteFecha(tickets, fecha);
+    }
+
+    private void reporteTipoVehiculo() {
+        System.out.println("Tipo de vehiculo:");
+        System.out.println("1. Buseta");
+        System.out.println("2. MicroBus");
+        System.out.println("3. Bus");
+        System.out.print("Opcion: ");
+        int tipo = sc.nextInt();
+        System.out.println("\n===== Tickets por tipo de vehiculo =====");
+        ticketService.reporteTipoVehiculo(tickets, tipo);
     }
 
 }
