@@ -12,6 +12,10 @@ import dao.VehiculoDao;
 import java.util.ArrayList;
 import java.util.List;
 import model.Vehiculo;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class VehiculoService {
 
@@ -85,4 +89,26 @@ public class VehiculoService {
         }
         return disponibles;
     }
+    private List<LocalDate> festivos = Arrays.asList(
+    LocalDate.of(2025, 1, 1),   // Año nuevo
+    LocalDate.of(2025, 1, 6),   // Reyes Magos
+    LocalDate.of(2025, 3, 24),  // Semana Santa
+    LocalDate.of(2025, 4, 18),  // Viernes Santo
+    LocalDate.of(2025, 5, 1),   // Día del trabajo
+    LocalDate.of(2025, 6, 2),   // Ascensión
+    LocalDate.of(2025, 6, 23),  // Corpus Christi
+    LocalDate.of(2025, 6, 30),  // Sagrado Corazón
+    LocalDate.of(2025, 7, 20),  // Independencia
+    LocalDate.of(2025, 8, 7),   // Batalla de Boyacá
+    LocalDate.of(2025, 8, 18),  // Asunción
+    LocalDate.of(2025, 10, 13), // Día de la Raza
+    LocalDate.of(2025, 11, 3),  // Todos los Santos
+    LocalDate.of(2025, 11, 17), // Independencia Cartagena
+    LocalDate.of(2025, 12, 8),  // Inmaculada Concepción
+    LocalDate.of(2025, 12, 25)  // Navidad
+);
+
+public boolean esFestivo(LocalDate fecha) {
+    return festivos.contains(fecha);
+}
 }
