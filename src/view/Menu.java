@@ -332,4 +332,22 @@ public class Menu {
         }
         if (!hayActivas) System.out.println("No hay reservas activas.");
     }
+
+    private void historialPasajero() {
+        sc.nextLine();
+        System.out.println("\n--- Historial de Reservas ---");
+        System.out.print("Cedula del pasajero: ");
+        String cedula = sc.nextLine();
+
+        boolean encontrado = false;
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getPasajero() != null &&
+                r.getPasajero().getCedula().equalsIgnoreCase(cedula)) {
+                r.imprimirDetalle();
+                System.out.println("---");
+                encontrado = true;
+            }
+        }
+        if (!encontrado) System.out.println("No se encontraron reservas para la cedula: " + cedula);
+    }
 }
