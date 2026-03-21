@@ -12,6 +12,9 @@ import dao.VehiculoDao;
 import java.util.ArrayList;
 import java.util.List;
 import model.Vehiculo;
+import dao.ReservaDAO;
+import model.Reserva;
+import model.EstadoReserva;
 
 public class VehiculoService {
 
@@ -53,11 +56,11 @@ public class VehiculoService {
     }
 
     public boolean verificarDisponibilidad(String placa) {
-        Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
-        if (v == null) return false;
-        return v.getPasajerosActuales() < v.getCapacidadMax();
-    }
-
+    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
+    if (v == null) return false;
+    int ocupados = v.getPasajerosActuales() + contarReservasActivas(placa);
+    return ocupados < v.getCapacidadMax();
+}
     public void actualizarCupos(String placa) {
         Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
         if (v == null) {
@@ -85,4 +88,16 @@ public class VehiculoService {
         }
         return disponibles;
     }
+    private ReservaDAO reservaDAO = new ReservaDAO();
+
+    public int contarReservasActivas(String placa) {
+    int count = 0;
+    for (Reserva r : reservaDAO.listarTodas()) {
+        if (r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
+            r.getEstado().equals(EstadoReserva.ACTIVA)) {
+            count++;
+        }
+    }
+    return count;
+}
 }
