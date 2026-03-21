@@ -1,32 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package service;
 
 import dao.VehiculoDao;
-import java.util.ArrayList;
-import java.util.List;
-import model.Vehiculo;
 import dao.ReservaDAO;
+import model.Buseta;
+import model.Bus;
+import model.MicroBus;
+import model.Ruta;
+import model.Vehiculo;
 import model.Reserva;
 import model.EstadoReserva;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VehiculoService {
 
     private VehiculoDao vehiculoDao;
+    private ReservaDAO reservaDAO = new ReservaDAO();
+
+    private static final List<Ruta> rutasDisponibles = new ArrayList<>();
+    static {
+        rutasDisponibles.add(new Ruta("R001", "Bogota",   "Medellin",  420, 480));
+        rutasDisponibles.add(new Ruta("R002", "Bogota",   "Cali",      510, 540));
+        rutasDisponibles.add(new Ruta("R003", "Medellin", "Cartagena", 650, 720));
+    }
 
     public VehiculoService() {
         this.vehiculoDao = new VehiculoDao();
     }
 
-    
-    public void registrar(String placa, String marca, String modelo) {
-        Vehiculo vehiculo = new Vehiculo(placa, marca, modelo);
+    public static List<Ruta> getRutasDisponibles() {
+        return rutasDisponibles;
+    }
+
+    public void registrar(String placa, String codigoRuta, String modelo) {
+        Ruta ruta = null;
+        for (Ruta r : rutasDisponibles) {
+            if (r.getCodigoRuta().equalsIgnoreCase(codigoRuta)) {
+                ruta = r;
+                break;
+            }
+        }
+        if (ruta == null) {
+            System.out.println("Ruta no encontrada. Rutas disponibles:");
+            for (Ruta r : rutasDisponibles) System.out.println("  " + r);
+            return;
+        }
+        Vehiculo vehiculo;
+        switch (modelo.toLowerCase()) {
+            case "buseta":   vehiculo = new Buseta(placa, ruta);   break;
+            case "microbus": vehiculo = new MicroBus(placa, ruta); break;
+            case "bus":      vehiculo = new Bus(placa, ruta);      break;
+            default:
+                System.out.println("Modelo no valido. Use: buseta, microbus o bus.");
+                return;
+        }
         registrarVehiculo(vehiculo);
     }
 
@@ -49,32 +76,36 @@ public class VehiculoService {
 
     public Vehiculo buscarVehiculoPorPlaca(String placa) {
         Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
-        if (v == null) {
-            System.out.println("No se encontro ningun vehiculo con la placa: " + placa);
-        }
+        if (v == null) System.out.println("No se encontro ningun vehiculo con la placa: " + placa);
         return v;
     }
 
+    public int contarReservasActivas(String placa) {
+        int count = 0;
+        for (Reserva r : reservaDAO.listarTodas()) {
+            if (r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
+                r.getEstado().equals(EstadoReserva.ACTIVA)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean verificarDisponibilidad(String placa) {
-    Vehiculo v = vehiculoDAO.buscarPorPlaca(placa);
-    if (v == null) return false;
-    int ocupados = v.getPasajerosActuales() + contarReservasActivas(placa);
-    return ocupados < v.getCapacidadMax();
-}
+        Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
+        if (v == null) return false;
+        int ocupados = v.getPasajerosActuales() + contarReservasActivas(placa);
+        return ocupados < v.getCapacidadMax();
+    }
+
     public void actualizarCupos(String placa) {
         Vehiculo v = vehiculoDao.buscarPorPlaca(placa);
-        if (v == null) {
-            System.out.println("No se encontro el vehiculo con la placa: " + placa);
-            return;
-        }
+        if (v == null) { System.out.println("No se encontro el vehiculo: " + placa); return; }
         if (!verificarDisponibilidad(placa)) {
-            System.out.println("El vehiculo con placa " + placa + " no tiene cupos disponibles.");
-            return;
+            System.out.println("El vehiculo no tiene cupos disponibles."); return;
         }
         v.setPasajerosActuales(v.getPasajerosActuales() + 1);
-        if (v.getPasajerosActuales() == v.getCapacidadMax()) {
-            v.setDisponible(false);
-        }
+        if (v.getPasajerosActuales() == v.getCapacidadMax()) v.setDisponible(false);
         vehiculoDao.actualizar(v);
         System.out.println("Cupo actualizado. Pasajeros actuales: " + v.getPasajerosActuales());
     }
@@ -82,22 +113,8 @@ public class VehiculoService {
     public List<Vehiculo> obtenerVehiculosDisponibles() {
         List<Vehiculo> disponibles = new ArrayList<>();
         for (Vehiculo v : vehiculoDao.listarTodos()) {
-            if (v.isDisponible()) {
-                disponibles.add(v);
-            }
+            if (v.isDisponible()) disponibles.add(v);
         }
         return disponibles;
     }
-    private ReservaDAO reservaDAO = new ReservaDAO();
-
-    public int contarReservasActivas(String placa) {
-    int count = 0;
-    for (Reserva r : reservaDAO.listarTodas()) {
-        if (r.getVehiculo().getPlaca().equalsIgnoreCase(placa) &&
-            r.getEstado().equals(EstadoReserva.ACTIVA)) {
-            count++;
-        }
-    }
-    return count;
-}
 }
