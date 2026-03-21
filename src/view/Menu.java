@@ -350,4 +350,38 @@ public class Menu {
         }
         if (!encontrado) System.out.println("No se encontraron reservas para la cedula: " + cedula);
     }
+
+    private void convertirReservaATicket() {
+        sc.nextLine();
+        System.out.println("\n--- Convertir Reserva en Ticket ---");
+        System.out.print("Codigo de la reserva: ");
+        String codigo = sc.nextLine();
+
+        Reserva reserva = reservaDAO.buscarPorCodigo(codigo);
+        if (reserva == null) {
+            System.out.println("No se encontro la reserva con codigo: " + codigo);
+            return;
+        }
+        if (!reserva.getEstado().equals(EstadoReserva.ACTIVA)) {
+            System.out.println("Solo se pueden convertir reservas activas. Estado actual: " + reserva.getEstado());
+            return;
+        }
+
+        String origen  = reserva.getVehiculo().getRuta() != null
+                         ? reserva.getVehiculo().getRuta().getCiudadOrigen()  : "N/A";
+        String destino = reserva.getVehiculo().getRuta() != null
+                         ? reserva.getVehiculo().getRuta().getCiudadDestino() : "N/A";
+
+        String resultado = ticketService.venderTicket(
+            reserva.getPasajero().getCedula(),
+            reserva.getVehiculo().getPlaca(),
+            origen, destino
+        );
+
+        reserva.setEstado(EstadoReserva.CONVERTIDA);
+        reservaDAO.actualizar(reserva);
+
+        System.out.println(resultado);
+        System.out.println("Reserva " + codigo + " convertida a ticket exitosamente.");
+    }
 }
