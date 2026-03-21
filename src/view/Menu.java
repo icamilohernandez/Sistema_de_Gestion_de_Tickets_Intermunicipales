@@ -384,4 +384,28 @@ public class Menu {
         System.out.println(resultado);
         System.out.println("Reserva " + codigo + " convertida a ticket exitosamente.");
     }
+
+    private void verificarVencidas() {
+        System.out.println("\n--- Verificar Reservas Vencidas ---");
+        List<Reserva> lista = reservaDAO.listarTodas();
+        int vencidas = 0;
+        for (Reserva r : lista) {
+            if (r.getEstado().equals(EstadoReserva.ACTIVA)) {
+                long dias = java.time.temporal.ChronoUnit.DAYS.between(
+                    r.getFechaCreacion(), LocalDate.now()
+                );
+                if (dias >= 1) {
+                    r.setEstado(EstadoReserva.CANCELADA);
+                    reservaDAO.actualizar(r);
+                    vencidas++;
+                }
+            }
+        }
+        if (vencidas > 0) {
+            System.out.println(vencidas + " reserva(s) vencidas canceladas automaticamente.");
+        } else {
+            System.out.println("No hay reservas vencidas.");
+        }
+    }
+
 }
